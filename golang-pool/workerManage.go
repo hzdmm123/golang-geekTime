@@ -36,9 +36,11 @@ func (p *WorkPool) InitPool() {
 		taskQueue:  nil,
 	}
 	p.start()
+	go p.workerRemoveConf()
 }
 func (p *WorkPool) start() {
 	for i := 0; i < p.defaultNum; i++ {
+		fmt.Printf("协程池的第【%d】协程初始化...\n",i)
 		p.workInit(i)
 	}
 }
@@ -47,7 +49,7 @@ func (p *WorkPool) workInit(id int) {
 	f := func(idNum int) {
 		for {
 			select {
-			case task := <-p.taskPool:
+			case task := <-p.taskPool://读任务
 				if task.startBool == true && task.Run != nil {
 					task.Run(task.params)
 				}
@@ -65,12 +67,12 @@ func (p *WorkPool) workInit(id int) {
 				if queueTask.startBool == true && queueTask.Run != nil {
 					queueTask.Run(queueTask.params)
 				}
-			case <-func() chan int {
+	/*		case <-func() chan int {
 				a := make(chan int)
 				fmt.Printf(`run ....`)
 				return a
 			}():
-				fmt.Printf(`.....`)
+				fmt.Printf(`.....`)*/
 			}
 
 		}
