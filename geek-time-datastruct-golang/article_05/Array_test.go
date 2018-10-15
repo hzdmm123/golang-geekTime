@@ -32,6 +32,7 @@ func TestFind(t *testing.T) {
 	arr.Print()
 
 	t.Log(arr.Find(0))
+
 	t.Log(arr.Find(9))
 	t.Log(arr.Find(10))
 }
